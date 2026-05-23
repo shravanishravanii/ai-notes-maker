@@ -33,11 +33,11 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const { title, content } = body
 
+  console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+  console.log('Supabase Key:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.slice(0, 20))
+
   if (!title || !content) {
-    return NextResponse.json(
-      { error: 'Title and content are required' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Title and content are required' }, { status: 400 })
   }
 
   const { data, error } = await supabase
@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (error) {
+    console.error('Supabase error:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
